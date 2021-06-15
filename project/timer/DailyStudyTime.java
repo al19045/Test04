@@ -1,3 +1,4 @@
+//日別時間管理部
 package com.example.studdysupport;
 
 import android.annotation.SuppressLint;
