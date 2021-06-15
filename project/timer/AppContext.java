@@ -1,3 +1,4 @@
+//Application Contextを取得
 package com.example.studdysupport;
 
 import android.app.Application;
