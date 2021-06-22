@@ -1,0 +1,8 @@
+1. res>menuの中にbottom_navigation.xmlを追加
+2. res>drawableの中にここのdrawableディレクトリ内のファイルを追加
+3. それぞれの画面に対応するxmlにbtmnavi.xmlの内容を追加
+4. それぞれのアクティビティにあたるjavaファイルにbtmnavigationview.javaの内容を追加
+
+・drawable内の～～_24.xmlはアイコンのファイルです．必要に応じて変更していただいて構いません．その際はbottom_navigation.xmlの変更も忘れずに
+・btmnavigationview.javaの内容はタイマー画面に準拠した内容ですので適宜変更お願いします．
+・わからないことなどがあればいつでも聞いて下さい
