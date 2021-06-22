@@ -4,101 +4,72 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.formatter.PercentFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
+    private TextView textView;
+    Mokuhyo mokuhyo = new Mokuhyo();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //別画面遷移
-        findViewById(R.id.buttonCalender).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, Calender_UI.class);
-                startActivity(intent);
-            }
-        });
+        textView = findViewById(R.id.bigMokuhyo);
 
-        findViewById(R.id.buttonTodo).setOnClickListener(new View.OnClickListener() {
-            @Override
+        ((Button) findViewById(R.id.mokuhyo)).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //テキスト入力を受け付けるビューを作成します。
+                        final EditText bigMokuhyo = new EditText(MainActivity.this);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                builder.setIcon(android.R.drawable.ic_dialog_info);
+                                builder.setTitle("目標を入力してください");
+                                builder.setView(bigMokuhyo);
+                                builder.setPositiveButton("確定", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        //textを取得
+                                        String text = bigMokuhyo.getText().toString();
+                                        if (text.length() > 20) {
+                                            Toast myToast = Toast.makeText(
+                                                    getApplicationContext(),
+                                                    "20文字以内で入力してください",
+                                                    Toast.LENGTH_SHORT
+                                            );
+                                            myToast.show();
+                                        } else {
+                                            mokuhyo.readMokuhyo(text);
+                                            textView.setText(text);
+                                        }
+                                    }
+                                })
+                                        .show();
 
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ToDo_UI.class);
-                startActivity(intent);
-            }
-        });
-
-        findViewById(R.id.buttonKeisoku).setOnClickListener(new View.OnClickListener() {
-            @Override
-
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MainTimerFrame.class);
-                startActivity(intent);
-            }
-        });
-
-        findViewById(R.id.buttonKiroku).setOnClickListener(new View.OnClickListener() {
-            @Override
-
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, StudyRecord＿UI.class);
-                startActivity(intent);
-            }
-        });
-
-        ((Button)findViewById(R.id.mokuhyo)).setOnClickListener(
-            	new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                String[] text = new String[0];
-                //テキスト入力を受け付けるビューを作成します。
-                final EditText Bigmokuhyo = new EditText(MainActivity.this);
-                new AlertDialog.Builder(MainActivity.this)
-                    .setIcon(android.R.drawable.ic_dialog_info)
-                    .setTitle("目標を入力してください")
-                    //setViewにてビューを設定します。
-                    .setView(Bigmokuhyo)
-                    .setPositiveButton("確定", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            //テキスト表示設定を入れる
+                                builder.setPositiveButton("キャンセル", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        dialog.dismiss();
+                                    }
+                                });
 
 
-                        }
-                    })
 
-                    .setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-
-                            //過去の目標を持ってくる
-
-                        }
-                    })
-                    .show();
-            
-            }
-        });
-
+                    }
+                });
     }
+
+    public void onTapEvent(View view) {
+        popup pop = new popup();
+        //ダイアログをだす
+        pop.show(getSupportFragmentManager(),"popup");
+        }
 }
+
+
 
