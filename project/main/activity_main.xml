@@ -7,26 +7,29 @@
     tools:context=".MainActivity">
 
 
-
     <ImageButton
         android:id="@+id/imageButton"
-        android:layout_width="280dp"
-        android:layout_height="280dp"
+        android:layout_width="317dp"
+        android:layout_height="308dp"
+        android:background="#FFFFFF"
+        android:contentDescription="TODO"
+        android:onClick="onTapChara"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.447"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.601"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintVertical_bias="0.651"
+        tools:src="@drawable/chara0"
+        tools:srcCompat="@drawable/chara0" />
 
     <TextView
         android:id="@+id/Comment"
         android:layout_width="217dp"
         android:layout_height="73dp"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="4dp"
         android:background="#FFFCDE"
         android:gravity="center"
-        android:text="コメント"
         android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/imageButton"
         app:layout_constraintEnd_toStartOf="@+id/pieChart"
@@ -52,25 +55,27 @@
         android:background="#FFC107"
         android:onClick="onTapEvent"
         android:src="@android:drawable/ic_menu_help"
+        app:layout_constraintBottom_toTopOf="@+id/textNext"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.545"
+        app:layout_constraintStart_toEndOf="@+id/imageButton"
         app:layout_constraintTop_toBottomOf="@+id/pieChart"
-        app:layout_constraintVertical_bias="0.026" />
+        app:layout_constraintVertical_bias="0.054" />
 
     <TextView
         android:id="@+id/textNext"
         android:layout_width="180dp"
         android:layout_height="30dp"
+        android:layout_marginTop="36dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:background="#95FFEB3B"
         android:gravity="center"
-        android:text="次の目標まで 〇%"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.939"
+        app:layout_constraintHorizontal_bias="0.969"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton"
-        app:layout_constraintVertical_bias="0.814" />
+        app:layout_constraintTop_toBottomOf="@+id/imageButton" />
 
     <TextView
         android:id="@+id/bigMokuhyo"
@@ -79,8 +84,6 @@
         android:layout_marginTop="55dp"
         android:background="#00ced1"
         android:gravity="center"
-
-        android:text="TextView"
         android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/pieChart"
@@ -92,6 +95,7 @@
 
     <Button
         android:id="@+id/mokuhyo"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="338dp"
         android:layout_height="90dp"
         android:layout_marginTop="55dp"
@@ -101,8 +105,23 @@
         app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        style="?android:attr/borderlessButtonStyle"
-        />
+        app:layout_constraintVertical_bias="0.0" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bnv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/design_default_color_surface"
+        app:itemTextColor="@drawable/bnv_state"
+        app:itemIconTint="@drawable/bnv_state"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:menu="@menu/bottom_navigation"
+        tools:ignore="InvalidId" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
