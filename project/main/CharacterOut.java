@@ -2,6 +2,7 @@ package com.example.studyapp;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -13,6 +14,7 @@ public class CharacterOut {
 
     //コメントを読み込むメソッド
     String readComment() {
+
         Context context = AppContext.getAppContext();
         String fileName = "Comment.txt";
         LinkedList<String> comment = new LinkedList<>();
@@ -22,6 +24,7 @@ public class CharacterOut {
         InputStream is = null;
         BufferedReader br = null;
         try {
+
             try {
                 // assetsフォルダを開く
                 AssetManager assets = context.getResources().getAssets();
@@ -43,7 +46,6 @@ public class CharacterOut {
         //コメントをランダムにひとつ抽出
         int index = new Random().nextInt(comment.size());
         String result = comment.get(index);
-
         return result;
     }
 }

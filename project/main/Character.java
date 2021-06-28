@@ -1,14 +1,14 @@
 package com.example.studyapp;
-
+import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class Character {
-    private TextView comment;
 
-    public void getComment() {
-        comment = comment.findViewById(R.id.bigMokuhyo);
+    public void getComment(TextView comment) {
         CharacterOut out = new CharacterOut();
         comment.setText(out.readComment());
+
     }
 
 

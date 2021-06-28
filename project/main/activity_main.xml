@@ -11,7 +11,7 @@
         android:id="@+id/imageButton"
         android:layout_width="317dp"
         android:layout_height="308dp"
-        android:background="#FFFFFF"
+        android:backgroundTint="@color/white"
         android:contentDescription="TODO"
         android:onClick="onTapChara"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -20,7 +20,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.651"
-        tools:src="@drawable/chara0"
         tools:srcCompat="@drawable/chara0" />
 
     <TextView
@@ -121,7 +120,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        app:menu="@menu/bottom_navigation"
         tools:ignore="InvalidId" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
