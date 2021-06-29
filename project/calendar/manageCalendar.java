@@ -1,4 +1,4 @@
-package com.example.calendar;
+package com.example.StudySupport;
 
 
 import android.content.Context;
