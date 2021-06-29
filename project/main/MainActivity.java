@@ -1,8 +1,24 @@
-package com.example.studyapp;
+/****************************************************
+ *** Module Name    :   MainActivity.java
+ *** Version        :   V1.0
+ *** Designer       :   川田　紗英花
+ *** Date           :   2021.06.28
+ *** Purpose        :   メイン画面のUI処理
+ ***
+ ***************************************************/
+/*
+*** Revision    :
+*** V1.0        :   川田　紗英花, 2021.06.28, 作成
+*/
+
+package com.example.studysupport;
+
+/*********************************************/
+/*   import file（ファイルの取り込み）    */
+/*********************************************/
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -17,17 +33,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.view.ViewGroup;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-
-
 public class MainActivity extends AppCompatActivity {
-    private TextView textView;
-    private TextView textNext;
-    private TextView comment;
-    private final int WC = ViewGroup.LayoutParams.WRAP_CONTENT;
-    Mokuhyou mokuhyo = new Mokuhyou();
+    private TextView textView; //　大きな目標
+    private TextView textNext; //　次の目標
+    private TextView comment;  //　キャラのコメント
+    Mokuhyo mokuhyo = new Mokuhyo();
     Character chara = new Character();
 
     @Override
@@ -35,16 +47,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //(初期処理)大きな目標表示
+        //　(初期処理)大きな目標表示
         textView = findViewById(R.id.bigMokuhyo);
         textView.setText(mokuhyo.getMokuhyo());
 
-        //(初期処理)次の目標パーセント表示
+        //　(初期処理)次の目標パーセント表示
         textNext = findViewById(R.id.textNext);
         int persent = 0;
         textNext.setText("次の目標まで " + persent + "%");
 
-        ImageButton imgbutton ;
+        ImageButton imgbutton; // キャラ画像ボタン
         imgbutton = findViewById(R.id.imageButton);
 
         if(persent<26){
@@ -57,25 +69,29 @@ public class MainActivity extends AppCompatActivity {
             imgbutton.setImageResource(R.drawable.chara3);
         }
 
-        //(初期処理)コメント表示
+        //　(初期処理)コメント表示
         comment = findViewById(R.id.Comment);
         chara.getComment(comment);
-        //大きい目標更新処理
+
+
+        //　大きい目標更新処理
         ((Button) findViewById(R.id.mokuhyo)).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
+                    //　ボックスをタッチ
                     public void onClick(View v) {
-                        //テキスト入力を受け付けるビューを作成します。
-
-                        final EditText bigMokuhyo = new EditText(MainActivity.this);
-                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                        final EditText bigMokuhyo = new EditText(MainActivity.this);    //　入力文字
+                        //　ダイアログ表示(画像、タイトル、入力文字表示)
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);  
                         builder.setIcon(android.R.drawable.ic_dialog_info);
                         builder.setTitle("目標を入力してください");
                         builder.setView(bigMokuhyo);
+                        //　確定ボタン押下
                         builder.setPositiveButton("確定", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                //textを取得
+                                //　入力された文字列を取得しtextに代入
                                 String text = bigMokuhyo.getText().toString();
+                                //　21文字以上の場合トーストを表示
                                 if (text.length() > 20) {
                                     Toast myToast = Toast.makeText(
                                             getApplicationContext(),
@@ -84,70 +100,67 @@ public class MainActivity extends AppCompatActivity {
                                     );
                                     myToast.show();
                                 } else {
+                                //　20文字以下なら文字列を保存、ボックスに表示
                                     mokuhyo.setMokuhyo(text);
                                     textView.setText(text);
                                 }
                             }
                         })
+                        //　キャンセルボタン押下　何もせず閉じる
                                 .setNegativeButton("キャンセル", null)
                                 .show();
-
-
-
                     }
                 });
         //宣言
-//        BottomNavigationView menu = findViewById(R.id.bnv);
-//        menu.getMenu().findItem(R.id.Timer).setChecked(true);
+       BottomNavigationView menu = findViewById(R.id.bnv);
+       menu.getMenu().findItem(R.id.Timer).setChecked(true);
 
 
         //画面遷移
-//        menu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-//            @SuppressLint("NonConstantResourceId")
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                Intent intent;
-//               /* switch (item.getItemId()){
-//                    case R.id.Main :
-//                        return true;
-//                    case R.id.Timer :
-//                        intent = new Intent(MainTimerFrame.this, MainActivity.class);
-//                        startActivity(intent);
-//                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-//                        return true;
-//                    case R.id.Study :
-//                        intent = new Intent(MainTimerFrame.this, StudyRecord_UI.class);
-//                        startActivity(intent);
-//                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-//                        return true;
-//                    case R.id.Calendar :
-//                        intent = new Intent(MainTimerFrame.this, Calendar_UI.class);
-//                        startActivity(intent);
-//                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-//                        return true;
-//                    case R.id.ToDo :
-//                        intent = new Intent(MainTimerFrame.this, Todo_UI.class);
-//                        startActivity(intent);
-//                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-//                        return true;
-//                } */
-//                return false;
-//            }
-//        });
-   }
+        menu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @SuppressLint("NonConstantResourceId")
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Intent intent;
+                switch (item.getItemId()){
+                    case R.id.Main :
+                        return true;
+                    case R.id.Timer :
+                       intent = new Intent(MainActivity.this, MainTimerFrame.class);
+                       startActivity(intent);
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        return true;
+                    case R.id.Study :
+                        intent = new Intent(MainActivity.this, StudyRecord_UI.class);
+                        startActivity(intent);
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        return true;
+                    case R.id.Calendar :
+                        intent = new Intent(MainActivity.this, Calendar_UI.class);
+                        startActivity(intent);
+                       overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        return true;
+                    case R.id.ToDo :
+                        intent = new Intent(MainActivity.this, Todo_UI.class);
+                        startActivity(intent);
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        return true;
+                } 
+                return false;
+            }
+        });
+    }
 
-    //キャラタッチ処理
-    public void onTapChara(View view){
-        //コメントを更新
+    //　キャラタッチ処理のメソッド
+    public void onTapChara(View view) { //(View)ビュー
+        //　コメントを更新
         chara.getComment(comment);
     }
 
-    //ヘルプボタン処理
-    public void onTapEvent(View view) {
+    //　ヘルプボタン処理のメソッド
+    public void onTapEvent(View view) { //(View)ビュー
         popup pop = new popup();
-        //ダイアログをだす
+        //　ダイアログをだす
         pop.show(getSupportFragmentManager(),"popup");
     }
-
-
 }
