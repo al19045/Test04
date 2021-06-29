@@ -1,4 +1,4 @@
-package com.example.calendar;
+package com.example.StudySupport;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
