@@ -1,3 +1,5 @@
+//日別学習時間がとってこれるかのテスト用(大谷さんが用意してくれているから不要)
+
 package com.example.StudySupport;
 
 import java.util.ArrayList;
