@@ -1,4 +1,4 @@
-package com.websarva.wings.android.application1b;
+package com.example.StudySupport;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
@@ -9,7 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -20,21 +22,29 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class StudyRecord_UI extends AppCompatActivity {
     BarChart chart;
     GoalSyori goalsyori = new GoalSyori();
-
+    Percentcal percentcal = new Percentcal();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /*Calendar cal = Calendar.getInstance();
+        int monday = cal.get(Calendar.DAY_OF_WEEK);
+        if(monday==4) {
+            String reset = " ";
+            goalsyori.resetGoal(reset);
+        }*/
         TextView goaltext = (TextView) findViewById(R.id.readtime);
-        goaltext.setText(goalsyori.getgoal());
+        goaltext.setText(goalsyori.getGoal());
+
+
+        TextView percenttext = (TextView) findViewById(R.id.percenttime);
+        percenttext.setText(String.valueOf(percentcal.cal()));
+
 
         Button hintbutton = (Button) findViewById(R.id.hintbutton);//リスナーをボタンに登録
         hintbutton.setOnClickListener(new View.OnClickListener() { //確認ボタンが押されたときの処理
@@ -211,9 +221,3 @@ public class StudyRecord_UI extends AppCompatActivity {
         return bars;
     }
 }
-
-
-
-
-
-

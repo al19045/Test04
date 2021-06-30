@@ -1,15 +1,15 @@
-package com.websarva.wings.android.application1b;
+package com.example.StudySupport;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+
 
 public class GoalSet extends AppCompatActivity {
 
@@ -31,28 +31,27 @@ public class GoalSet extends AppCompatActivity {
             }
         });
         Button okbutton = (Button) findViewById(R.id.okbutton);//リスナーをボタンに登録
-        okbutton.setOnClickListener(new View.OnClickListener() { //確認ボタンが押されたときの処理
+        okbutton.setOnClickListener(new View.OnClickListener(){ //確認ボタンが押されたときの処理
             @Override
-            public void onClick(View view) {
+            public void onClick(View view){
                 EditText goaltime = (EditText) findViewById(R.id.inputtime); //EditTextで入力された値を受け取る
-                String str = goaltime.getText().toString(); //Stirng型で読み込む
-                int inttime = Integer.parseInt(str); //int型での値も用意する
-                if(inttime > 168){ //入力された時間が168時間より大きかった場合
+                String str = goaltime.getText().toString();
+                int inttime = Integer.parseInt(str);
+                //入力された時間が168時間より大きかった場合
+                if(inttime > 168){
                     DialogFragment dialogFragment = new TimeAlertDialog();
-                    dialogFragment.show(getSupportFragmentManager(),"Timeerrordialog"); //TimeAlertDiaolgを呼び出す
+                    dialogFragment.show(getSupportFragmentManager(),"Timeerrordialog");
                 } else { //入力された時間が168時間以下だった場合
-                    saveTime(str); //入力された値をファイルに入力
-                    finish(); //StudyRecord＿UIに戻る
+                    GoalSyori goalsyori = new GoalSyori();
+                    goalsyori.setGoal(str);//入力された値をファイルに入力
+                    Intent intent = new Intent(GoalSet.this,StudyRecord_UI.class);
+                    intent.putExtra("goaltime",str);
+                    //StudyRecord＿UIに戻る
+                    startActivity(intent);
                 }
             }
 
-            public void saveTime(String str) { //入力された値をファイルに保存する
-                try (FileWriter writer = new FileWriter(file)) {
-                    writer.write(str);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+
         });
     }
 }

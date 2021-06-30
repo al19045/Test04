@@ -1,4 +1,4 @@
-package com.websarva.wings.android.application1b;
+package com.example.StudySupport;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
