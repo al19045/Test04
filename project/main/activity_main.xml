@@ -16,10 +16,10 @@
         android:onClick="onTapChara"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.447"
+        app:layout_constraintHorizontal_bias="0.355"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.651"
+        app:layout_constraintVertical_bias="0.587"
         tools:srcCompat="@drawable/chara0" />
 
     <TextView
@@ -39,27 +39,28 @@
         android:id="@+id/pieChart"
         android:layout_width="115dp"
         android:layout_height="115dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/imageButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.482"
         app:layout_constraintStart_toEndOf="@+id/Comment" />
 
-    <ImageButton
+    <Button
         android:id="@+id/buttonHelp"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:background="#FFC107"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="right"
+        android:background="@drawable/circle_button"
         android:onClick="onTapEvent"
-        android:src="@android:drawable/ic_menu_help"
+        android:text="？"
+        android:textSize="13sp"
+        app:backgroundTint="#FFEB3B"
         app:layout_constraintBottom_toTopOf="@+id/textNext"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.545"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/imageButton"
         app:layout_constraintTop_toBottomOf="@+id/pieChart"
-        app:layout_constraintVertical_bias="0.054" />
+        app:layout_constraintVertical_bias="0.027" />
 
     <TextView
         android:id="@+id/textNext"
@@ -112,14 +113,15 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@color/design_default_color_surface"
-        app:itemTextColor="@drawable/bnv_state"
         app:itemIconTint="@drawable/bnv_state"
+        app:itemTextColor="@drawable/bnv_state"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_bias="0.993"
+        app:menu="@menu/bottom_navigation"
         tools:ignore="InvalidId" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
