@@ -9,7 +9,7 @@
 /*
 *** Revision    :
 *** V1.0        :   川田　紗英花, 2021.06.28, 作成
-*** V1.1        :   川田　紗英花, 2021.07.03, 円グラフの作成
+*** V1.1        :   川田　紗英花, 2021.07.03, 達成率の作成
 */
 
 
@@ -60,16 +60,20 @@ public class MainActivity extends AppCompatActivity {
         //　(初期処理)次の目標パーセント表示
         textNext = findViewById(R.id.textNext);
         int next; // 残り%
-        if(percent < 26){
-            next = 25 - percent;
-         } else if(percent<51){
-            next = 50 - percent;
-         }else if(percent<76) {
-            next = 75 - percent;
-         }else{
-            next = 100 - percent;
+        if (percent < 100) {
+            if (percent < 26) {
+                next = 25 - percent;
+            } else if (percent < 51) {
+                next = 50 - percent;
+            } else if (percent < 76) {
+                next = 75 - percent;
+            } else {
+                next = 100 - percent;
+            }
+            textNext.setText("次の目標まで　" + next + "%");
+        } else {
+            textNext.setText("目標達成！");
         }
-        textNext.setText("次の目標まで　" + next + "%");
 
         //　(初期処理)達成率表示
         pie = findViewById(R.id.pieChart);
@@ -79,14 +83,16 @@ public class MainActivity extends AppCompatActivity {
         ImageButton imgbutton; // キャラ画像ボタン
         imgbutton = findViewById(R.id.imageButton);
 
-        if(percent<26){
+        if (percent < 25) {
             imgbutton.setImageResource(R.drawable.chara0);
-        }else if(percent<51){
+        } else if (percent < 50) {
             imgbutton.setImageResource(R.drawable.chara1);
-        }else if(percent<76) {
+        } else if (percent < 75) {
             imgbutton.setImageResource(R.drawable.chara2);
-        }else{
+        } else if (percent < 100) {
             imgbutton.setImageResource(R.drawable.chara3);
+        } else {
+            imgbutton.setImageResource(R.drawable.chara4);
         }
 
         //　(初期処理)コメント表示
@@ -101,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         final EditText bigMokuhyo = new EditText(MainActivity.this);    //　入力文字
                         //　ダイアログ表示(画像、タイトル、入力文字表示)
-                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);  
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                         builder.setIcon(android.R.drawable.ic_dialog_info);
                         builder.setTitle("目標を入力してください");
                         builder.setView(bigMokuhyo);
@@ -119,20 +125,20 @@ public class MainActivity extends AppCompatActivity {
                                     );
                                     myToast.show();
                                 } else {
-                                //　20文字以下なら文字列を保存、ボックスに表示
+                                    //　20文字以下なら文字列を保存、ボックスに表示
                                     mokuhyo.setMokuhyo(text);
                                     textView.setText(text);
                                 }
                             }
                         })
-                        //　キャンセルボタン押下　何もせず閉じる
+                                //　キャンセルボタン押下　何もせず閉じる
                                 .setNegativeButton("キャンセル", null)
                                 .show();
                     }
                 });
         //宣言
-       BottomNavigationView menu = findViewById(R.id.bnv);
-       menu.getMenu().findItem(R.id.Main).setChecked(true);
+        BottomNavigationView menu = findViewById(R.id.bnv);
+        menu.getMenu().findItem(R.id.Main).setChecked(true);
 
 
         //画面遷移
@@ -141,25 +147,25 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Intent intent;
-                switch (item.getItemId()){
-                    case R.id.Main :
+                switch (item.getItemId()) {
+                    case R.id.Main:
                         return true;
-                    case R.id.Timer :
-                       intent = new Intent(MainActivity.this, MainTimerFrame.class);
-                       startActivity(intent);
+                    case R.id.Timer:
+                        intent = new Intent(MainActivity.this, MainTimerFrame.class);
+                        startActivity(intent);
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                         return true;
-                    case R.id.Study :
+                    case R.id.Study:
                         intent = new Intent(MainActivity.this, StudyRecord_UI.class);
                         startActivity(intent);
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                         return true;
-                    case R.id.Calendar :
+                    case R.id.Calendar:
                         intent = new Intent(MainActivity.this, Calendar_UI.class);
                         startActivity(intent);
-                       overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                         return true;
-                    case R.id.ToDo :
+                    case R.id.ToDo:
                         intent = new Intent(MainActivity.this, Todo_UI.class);
                         startActivity(intent);
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -180,6 +186,6 @@ public class MainActivity extends AppCompatActivity {
     public void onTapEvent(View view) { //(View)ビュー
         popup pop = new popup();
         //　ダイアログをだす
-        pop.show(getSupportFragmentManager(),"popup");
+        pop.show(getSupportFragmentManager(), "popup");
     }
-
+}
