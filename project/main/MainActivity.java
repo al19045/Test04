@@ -20,10 +20,15 @@ package com.example.studysupport;
 /*********************************************/
 
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,20 +36,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private TextView textView; //　大きな目標
     private TextView textNext; //　次の目標
     private TextView comment;  //　キャラのコメント
+    private TextView pie;      //　達成率表示
     Mokuhyo mokuhyo = new Mokuhyo();
     Character chara = new Character();
     Percentcal percentCal = new Percentcal();
@@ -74,7 +72,8 @@ public class MainActivity extends AppCompatActivity {
         textNext.setText("次の目標まで　" + next + "%");
 
         //　(初期処理)達成率表示
-        setupPieChart();
+        pie = findViewById(R.id.pieChart);
+        pie.setText(percent + "%");
 
         // (初期処理)キャラの画像設定
         ImageButton imgbutton; // キャラ画像ボタン
@@ -184,20 +183,3 @@ public class MainActivity extends AppCompatActivity {
         pop.show(getSupportFragmentManager(),"popup");
     }
 
-    //　達成率円グラフ処理のメソッド
-    private void setupPieChart() {
-        List<PieEntry> pieEntries = new ArrayList<>();
-        pieEntries.add(new PieEntry(percent, "達成率"));
-        pieEntries.add(new PieEntry(1-percent, ""));
-
-
-        PieDataSet dataSet = new PieDataSet(pieEntries, "Rainfall for Vancouver");
-        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-        PieData data = new PieData(dataSet);
-
-        //PieChartを取得する:
-        PieChart piechart = (PieChart)findViewById(R.id.pieChart);
-        piechart.setData(data);
-        piechart.invalidate();
-    }
-}

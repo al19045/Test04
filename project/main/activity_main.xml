@@ -35,11 +35,13 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <com.github.mikephil.charting.charts.PieChart
+    <TextView
         android:id="@+id/pieChart"
-        android:layout_width="115dp"
-        android:layout_height="115dp"
+        android:layout_width="91dp"
+        android:layout_height="70dp"
         android:layout_marginBottom="8dp"
+        android:textColor="@color/purple_200"
+        android:textSize="40sp"
         app:layout_constraintBottom_toTopOf="@+id/imageButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.482"
@@ -123,5 +125,17 @@
         app:layout_constraintVertical_bias="0.993"
         app:menu="@menu/bottom_navigation"
         tools:ignore="InvalidId" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="101dp"
+        android:layout_height="23dp"
+        android:text="目標達成率"
+        app:layout_constraintBottom_toTopOf="@+id/Comment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bigMokuhyo"
+        app:layout_constraintVertical_bias="0.96" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
