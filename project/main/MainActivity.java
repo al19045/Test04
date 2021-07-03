@@ -1,15 +1,17 @@
 /****************************************************
  *** Module Name    :   MainActivity.java
- *** Version        :   V1.0
+ *** Version        :   V1.1
  *** Designer       :   川田　紗英花
- *** Date           :   2021.06.28
+ *** Date           :   2021.07.03
  *** Purpose        :   メイン画面のUI処理
  ***
  ***************************************************/
 /*
 *** Revision    :
 *** V1.0        :   川田　紗英花, 2021.06.28, 作成
+*** V1.1        :   川田　紗英花, 2021.07.03, 円グラフの作成
 */
+
 
 package com.example.studysupport;
 
@@ -17,23 +19,27 @@ package com.example.studysupport;
 /*   import file（ファイルの取り込み）    */
 /*********************************************/
 
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.view.ViewGroup;
+
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private TextView textView; //　大きな目標
@@ -41,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView comment;  //　キャラのコメント
     Mokuhyo mokuhyo = new Mokuhyo();
     Character chara = new Character();
+    Percentcal percentCal = new Percentcal();
+    int percent = percentCal.cal();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,17 +61,30 @@ public class MainActivity extends AppCompatActivity {
 
         //　(初期処理)次の目標パーセント表示
         textNext = findViewById(R.id.textNext);
-        int persent = 0;
-        textNext.setText("次の目標まで " + persent + "%");
+        int next; // 残り%
+        if(percent < 26){
+            next = 25 - percent;
+         } else if(percent<51){
+            next = 50 - percent;
+         }else if(percent<76) {
+            next = 75 - percent;
+         }else{
+            next = 100 - percent;
+        }
+        textNext.setText("次の目標まで　" + next + "%");
 
+        //　(初期処理)達成率表示
+        setupPieChart();
+
+        // (初期処理)キャラの画像設定
         ImageButton imgbutton; // キャラ画像ボタン
         imgbutton = findViewById(R.id.imageButton);
 
-        if(persent<26){
+        if(percent<26){
             imgbutton.setImageResource(R.drawable.chara0);
-        }else if(persent<51){
+        }else if(percent<51){
             imgbutton.setImageResource(R.drawable.chara1);
-        }else if(persent<76) {
+        }else if(percent<76) {
             imgbutton.setImageResource(R.drawable.chara2);
         }else{
             imgbutton.setImageResource(R.drawable.chara3);
@@ -72,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
         //　(初期処理)コメント表示
         comment = findViewById(R.id.Comment);
         chara.getComment(comment);
-
 
         //　大きい目標更新処理
         ((Button) findViewById(R.id.mokuhyo)).setOnClickListener(
@@ -113,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
                 });
         //宣言
        BottomNavigationView menu = findViewById(R.id.bnv);
-       menu.getMenu().findItem(R.id.Timer).setChecked(true);
+       menu.getMenu().findItem(R.id.Main).setChecked(true);
 
 
         //画面遷移
@@ -145,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                         return true;
-                } 
+                }
                 return false;
             }
         });
@@ -162,5 +182,22 @@ public class MainActivity extends AppCompatActivity {
         popup pop = new popup();
         //　ダイアログをだす
         pop.show(getSupportFragmentManager(),"popup");
+    }
+
+    //　達成率円グラフ処理のメソッド
+    private void setupPieChart() {
+        List<PieEntry> pieEntries = new ArrayList<>();
+        pieEntries.add(new PieEntry(percent, "達成率"));
+        pieEntries.add(new PieEntry(1-percent, ""));
+
+
+        PieDataSet dataSet = new PieDataSet(pieEntries, "Rainfall for Vancouver");
+        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        PieData data = new PieData(dataSet);
+
+        //PieChartを取得する:
+        PieChart piechart = (PieChart)findViewById(R.id.pieChart);
+        piechart.setData(data);
+        piechart.invalidate();
     }
 }
