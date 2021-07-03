@@ -1,4 +1,4 @@
-package com.example.StudySupport;
+package com.example.studysupport;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;

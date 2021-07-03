@@ -1,4 +1,4 @@
-package com.example.StudySupport;
+package com.example.studysupport;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,6 +7,7 @@ import androidx.fragment.app.DialogFragment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -34,7 +36,7 @@ public class StudyRecord_UI extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_study);
 
         /*Calendar cal = Calendar.getInstance();
         int monday = cal.get(Calendar.DAY_OF_WEEK);
@@ -71,7 +73,7 @@ public class StudyRecord_UI extends AppCompatActivity {
 
         //宣言
         BottomNavigationView menu = findViewById(R.id.bnv);
-        menu.getMenu().findItem(R.id.Syudy).setChecked(true);
+        menu.getMenu().findItem(R.id.Study).setChecked(true);
 
 
 //画面遷移
@@ -82,24 +84,24 @@ public class StudyRecord_UI extends AppCompatActivity {
                 Intent intent;
                 switch (item.getItemId()){
                     case R.id.Main :
-                        intent = new Intent(MainTimerFrame.this, MainUI.class);
+                        intent = new Intent(StudyRecord_UI.this, MainActivity.class);
                         startActivity(intent);
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                         return true;
                     case R.id.Timer :
-                        intent = new Intent(MainTimerFrame.this, MainTimerFrame.class);
+                        intent = new Intent(StudyRecord_UI.this, MainTimerFrame.class);
                         startActivity(intent);
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                         return true;
                     case R.id.Study :
                         return true;
                     case R.id.Calendar :
-                        intent = new Intent(MainTimerFrame.this, Calendar_UI.class);
+                        intent = new Intent(StudyRecord_UI.this, calendarUI.class);
                         startActivity(intent);
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                         return true;
                     case R.id.ToDo :
-                        intent = new Intent(MainTimerFrame.this, Todo_UI.class);
+                        intent = new Intent(StudyRecord_UI.this, Todo_UI.class);
                         startActivity(intent);
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                         return true;
@@ -171,11 +173,12 @@ public class StudyRecord_UI extends AppCompatActivity {
         XAxis xAxis = chart.getXAxis();
         //X軸に表示するLabelのリスト(最初の""は原点の位置)
         int mon1;
-        if (cl.get(cl.MONTH) == 0) {
+        /*if (cl.get(cl.MONTH) == 0) {
             mon1 = 12;
         } else {
             mon1 = cl.get(cl.MONTH);
-        }
+        }*/
+        mon1 = cl.get(cl.MONTH) + 1;
         Integer mon1i = Integer.valueOf(mon1);
         String mon1s = mon1i.toString();
 
@@ -214,11 +217,12 @@ public class StudyRecord_UI extends AppCompatActivity {
     }
     //棒グラフのデータを取得
     private List<IBarDataSet> getBarData() {//表示させるデータ
-        Calendar cl=Calendar.getInstance();
+        Calendar cl=Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo"));
         ArrayList<BarEntry> entries = new ArrayList<>();
         DailyStudyTime dailystudytime=new DailyStudyTime();
         for(int i=7;i>0;i--){
             int time=dailystudytime.read(cl);
+            //Log.d("studytime", "" + cl + time);
             if(time==-1)
                 time=0;
             entries.add(new BarEntry(i,time));

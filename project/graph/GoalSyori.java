@@ -1,4 +1,4 @@
-package com.example.StudySupport;
+package com.example.studysupport;
 
 public class GoalSyori {
     //　ファイルから目標を読み込み出力する
