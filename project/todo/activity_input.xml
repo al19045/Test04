@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 
     android:orientation="vertical" >
 
@@ -19,29 +20,32 @@
         android:layout_height="wrap_content"
         android:text="保存"
         android:focusable="true"
-        android:onClick=""/>
+        android:onClick="register"/>
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/idou"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="キャンセル" />
+        android:onClick="tolist1"
+        android:text="一覧画面へ" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
+
         android:text="内容" />
 
     <EditText
-        android:id="@+id/timers_name_edit_text"
+        android:id="@+id/edit_text1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
         android:singleLine="true"
         android:onClick="task_on"
-
         android:maxLength="20"
+
 
         android:imeOptions="actionDone"/>
 
@@ -52,14 +56,28 @@
         android:text="締め切り" />
 
     <EditText
-        android:id="@+id/timers_name_edit_text2"
+        android:id="@+id/edit_text2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="date"
-        android:onClick="timers_name_edit_text2_onClick"
+        android:onClick="edit_text2_onClick"
         android:singleLine="true"
         android:focusable="false"/>
-
+    <ImageButton
+        android:id="@+id/buttonHelp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="#FFC107"
+        android:onClick="onTapEvent"
+        android:src="@android:drawable/ic_menu_help"
+        app:layout_constraintBottom_toTopOf="@+id/textNext"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.545"
+        app:layout_constraintStart_toEndOf="@+id/imageButton"
+        app:layout_constraintTop_toBottomOf="@+id/pieChart"
+        app:layout_constraintVertical_bias="0.054" />
 
 
 </LinearLayout>

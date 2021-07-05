@@ -1,4 +1,4 @@
-package com.example.Trytodo;
+package com.example.studdysupport;
 
 //package com.example.gamn4;
 //Manage_ToDO リスト管理部　csvファイルに書き込み
@@ -7,10 +7,8 @@ import android.content.Context;
 import android.util.Log;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -43,7 +41,7 @@ public class Manege_ToDo {
 
     TimeZone timezone = TimeZone.getTimeZone("Asia/Tokyo");
 
-    private void readFile() {
+    public String readFile() {
         String line;
         Log.i("before read", "" + studylist);
 
@@ -61,6 +59,7 @@ public class Manege_ToDo {
                 cal.set(Integer.parseInt(split[0]), Integer.parseInt(split[1]) - 1, Integer.parseInt(split[2]),
                         0, 0, 0);
                 cal.set(Calendar.MILLISECOND, 0);
+
                 study.date = cal;
 
                 // study.time = Integer.parseInt(split[3]);
@@ -69,8 +68,11 @@ public class Manege_ToDo {
                 study.id = Integer.parseInt(split[5]);
                 // study.task=(split[4]);
                 studylist.add(study);
+
             }
+
             br.close();
+
         } catch (Exception e) {
             System.out.println("Error");
             e.printStackTrace();
@@ -102,6 +104,8 @@ public class Manege_ToDo {
     }
     */
         }
+
+        return  studylist.get(1).day;
     }
 
 

@@ -1,99 +1,178 @@
-package com.example.Trytodo;
+/****************************************************
+ *** Module Name    :   ToDo_UI
+ *** Version        :   V1.0
+ *** Designer       :   馬場　章
+ *** Date           :   2021.07.3
+ *** Purpose        :   ToDoリスト表示画面処理部
+ ***
+ ***************************************************/
+/*
+ *** Revision    :
+ *** V1.0        :   馬場　章　2021.07.3
+ */
 //ToDO_UI　メイン画面リストの表示消去
-import androidx.appcompat.app.AppCompatActivity;
 
+package com.example.studdysupport;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.CursorAdapter;
+import android.widget.SimpleCursorAdapter;
 
-import java.util.ArrayList;
+import com.example.studdysupport.helper.ToDoOpenHelper;
 
-public class ToDo_UI extends AppCompatActivity {
-    ArrayAdapter<String> adapter;
+public class ToDo_UI extends
+        android.app.ListActivity {
 
-    //= new Intent(this, Setting.class);
+    Cursor cursor;      //データベースへの要求結果
+
+    private long a = 0;     //listの仮ID
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+    }
+   //データベースと接続，リストの表示
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SQLiteDatabase database = null;
+        try {
+            SQLiteOpenHelper helper = new ToDoOpenHelper(ToDo_UI.this);
+            database = helper.getReadableDatabase();
 
-        ListView listView = (ListView) findViewById(R.id.list);
-        //ArrayAdapterオブジェクト生成
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
-        //Buttonオブジェクト取得
-        Button btn = (Button) findViewById(R.id.modoru);
-        //クリックイベントの通知先指定
-        btn.setOnClickListener(new View.OnClickListener() {
-            //クリックイベント
-            @Override
-            public void onClick(View v) {
-                //要素追加
-                addStringData();
-            }
-        });
-        //Adapterのセット
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                            @Override
-                                            public void onItemClick(AdapterView<?> av, View view, int position, long id) {
-                                                //リスト個も億を取得削除
-                                                adapter.remove((String) ((TextView) view).getText());
-                                            }
-                                        }
-        );
-    }     //要素追加処理
-
-    private void addStringData() {
-        //EditTextオブジェクト取得
-        EditText edit = (EditText) findViewById(R.id.edit_text);
-        //EditText(テキスト)を取得し、アダプタに追加
-        adapter.add(edit.getText().toString());
+            cursor = database.query("ToDoList", null, null, null, null, null, null);
+            SimpleCursorAdapter adapter = new SimpleCursorAdapter(ToDo_UI.this, R.layout.list_row, cursor, new String[]{"title"}, new int[]{R.id.list_row1}, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+            setListAdapter(adapter);
+        } catch (Exception e) {
+            Log.e("エラー", e.getMessage(), e);
+        } finally {
+            database.close();
+        }
+    }
+//タスクがクリックされたら編集画面に移動する
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        Intent intent = new Intent(ToDo_UI.this, ToDo_Setting.class);
+        intent.putExtra("id", id);
+        startActivity(intent);
+        a = id;
     }
 
 
-        /*final ArrayList<String> data = new ArrayList<>();
-        data.add("湖沼");
-        data.add("ターメリック");
-        data.add("コリアンダー");
-        data.add("生姜");
-        data.add("ニンニク");
-        data.add("サフラン");
-        adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,data);
-        ListView list=findViewById(R.id.list);
-        list.setAdapter(adapter);
-        //リスト項目をクリックしたときの処理を定義
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-                                        @Override
-                                        public void onItemClick(AdapterView<?> av, View view, int position, long id) {
-                                            //リスト個も億を取得削除
-                                            adapter.remove((String)((TextView)view).getText());
-                                        }
-                                    }
-        );
-    }*/
+    //    TextView userIdTextView = ((View) view.getParent()).findViewById(R.id.list_row1);
+    //  String userIdStr = userIdTextView.getText().toString();
+    //Log.d("select_id", "選択したidは" + userIdStr);
+
+//タスクの完了ボタンが押された場合そのタスクを消す，未完成
+    public void deleteTask(View view) {
+
+        View parent = (View) view.getParent();
+
+        View i = (View) view;
+        //View parent2=(View) parent.getParent();
+        TextView taskTextView = (TextView) parent.findViewById(R.id.list_row1);
+
+        String task = String.valueOf(taskTextView.getText());
+
+        SQLiteOpenHelper helperDelete = null;
+        SQLiteDatabase databaseDelete = null;
 
 
+        try {
+            //データベース読み込み
+            helperDelete = new ToDoOpenHelper(ToDo_UI.this);
+            databaseDelete = helperDelete.getWritableDatabase();
+
+            int deleteCount = databaseDelete.delete("ToDoList", "_id=?", new String[]{String.valueOf(a)});
+            //消去成功時に「消去しました」と表示，失敗は「登録できませんでした」
+            if (deleteCount == 1) {
+                Toast.makeText(ToDo_UI.this, R.string.toast_delete, Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(ToDo_UI.this, R.string.toast_failed, Toast.LENGTH_LONG).show();
+            }
+            //画面のリロード
+            onResume();
+            //例外処理
+        } catch (Exception e) {
+
+            Log.e("エラー", e.getMessage(), e);
+        } finally {
+            //dbクローズ
+            databaseDelete.close();
+        }
+    }
+ //作成ボタンが押されたとき入力画面に移動する
     public void sakusei_onClick(View v) {
         Intent intent = new Intent(this, ToDo_Input.class);
         startActivityForResult(intent, 1);
     }
 
-    /*protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == RESULT_OK) {
-            String timers_name_edit_text = data.getStringExtra("String timers_name_edit_text");
-            Toast.makeText(this,
-                    String.format("こんにちは、%sさん！",
-                            timers_name_edit_text  ),
-                    Toast.LENGTH_SHORT).show();
+//移動時にdbから切断
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (cursor != null || !cursor.isClosed()) {
+            cursor.close();
         }
-    */
-    //宣言
-}
+    }
+
+
+    /*public void onTapEvent(View view) { //(View)ビュー
+
+        DialogFragment dialogFragment = new popup();
+        //　ダイアログをだす
+        dialogFragment.show(getFragmentManager(),  );
+    }
+
+*/}
+
+
+
+    //画面遷移
+  /*  BottomNavigationView menu = findViewById(R.id.bnv);
+        menu.getMenu().findItem(R.id.Main).setChecked(true);
+
+
+
+        menu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @SuppressLint("NonConstantResourceId")
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Intent intent;
+            switch (item.getItemId()) {
+                case R.id.Main:
+                    return true;
+                case R.id.Timer:
+                    intent = new Intent(MainActivity.this, MainTimerFrame.class);
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    return true;
+                case R.id.Study:
+                    intent = new Intent(MainActivity.this, StudyRecord_UI.class);
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    return true;
+                case R.id.Calendar:
+                    intent = new Intent(MainActivity.this, Calendar_UI.class);
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    return true;
+                case R.id.ToDo:
+                    intent = new Intent(MainActivity.this, Todo_UI.class);
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    return true;
+            }
+            return false;
+        }
+    });*/
+
+

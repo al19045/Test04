@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">ToDoListApp</string>
+    <string name="lbl_title">内容：</string>
+    <string name="lbl_content">締め切り：</string>
+    <string name="btn_input_register">登録</string>
+    <string name="toast_register">登録しました</string>
+    <string name="toast_failed">登録出来ませんでした</string>
+
+    <string name="hint_title">タイトルを入力してください</string>
+    <string name="hint_content">内容を入力してください</string>
+    <string name="btn_input_to_list">一覧画面へ</string>
+    <string name="lbl_empty">表示するTODOはありません</string>
+
+    <string name="btn_update">更新</string>
+    <string name="toast_update">更新しました</string>
+
+    <string name="btn_delete">削除</string>
+    <string name="toast_delete">削除しました</string>
+    <string name="done">完了</string>
+    <string name="hello">Hellow</string>
+    <string name="make_timers_msg">aaaa</string>
+    <string name="toast_failed20">20文字未満で入力してください</string>
+    <string name="toast_failed1">1文字以上で入力してください</string>
+</resources>
