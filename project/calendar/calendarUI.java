@@ -8,6 +8,8 @@
 package com.example.studysupport;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
@@ -18,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -27,37 +30,91 @@ import com.example.studysupport.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.CalendarView;
+import android.widget.CheckBox;
+import android.widget.CheckedTextView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class calendarUI extends AppCompatActivity {
-    int globalyear,globalmonth,globalday;//カレンダーで選択されている年月日
+    Calendar today = Calendar.getInstance();
+    int globalyear = today.get(Calendar.YEAR);
+    int globalmonth = today.get(Calendar.MONTH)+1;
+    int globaldate = today.get(Calendar.DATE);//カレンダーで選択されている年月日
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         CalendarView cal = findViewById(R.id.Calendar);
+        long a = cal.getDate();
+        Log.d("calendar", String.valueOf(a));
+        cal.setMaxDate(a);
+
+        //今日のデータの表示
+        String txt; //出力内容
+        calendarMain data = new calendarMain();//データの取得および追加・削除に用いるクラス
+        data.get(globalyear, globalmonth, globaldate);
+        //日付の表示
+        TextView dateview = (TextView) calendarUI.this.findViewById(R.id.dayView);
+        txt = globalyear + "年" + globalmonth + "月" + globaldate + "日";
+        dateview.setText(txt);
+        //学習時間の表示
+        TextView study = (TextView) calendarUI.this.findViewById(R.id.studyTime);
+        int hour = 0, minute = 0;//学習時間(hour時間minute分)
+        hour = data.studyTime / 60;
+        minute = data.studyTime % 60;
+        txt = "・学習時間\n" + hour + "時間" + minute + "分\n";
+        study.setText(txt);
+        //todoの表示
+        TextView todo = (TextView) calendarUI.this.findViewById(R.id.todoList);
+        txt = "・todo\n";
+        if (data.task == null) { //タスクが登録されていない場合
+            txt = txt + "タスクはありません。\n";
+        } else { //タスクがある場合
+            for (int i = 0; i < data.task.size(); i++) {
+                txt = txt + data.task.get(i) + "\n";
+            }
+        }
+        todo.setText(txt);
+        //イベント情報の表示
+        TextView event = (TextView) calendarUI.this.findViewById(R.id.eventView);
+        txt = "";
+        if (data.event.size() == 0) { //イベントが登録されていない場合
+            txt = txt + "イベントはありません。\n";
+        } else { //イベントがある場合
+            for (int i = 0; i < data.event.size(); i++) {
+                txt = txt + data.event.get(i) + "\n";
+            }
+        }
+        event.setText(txt);
 
         cal.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            public void onSelectedDayChange(CalendarView view, int year, int month, int day) {
+            public void onSelectedDayChange(CalendarView view, int year, int month, int date) {
                 String txt;//画面表示するテキスト内容
                 globalyear = year;
                 globalmonth = month + 1;
-                globalday = day;
+                globaldate = date;
                 //情報の取得（学習時間・タスク・イベント）
                 calendarMain data = new calendarMain();
                 //boolean check = data.add(2021, 6, 15, "test");
-                data.get(globalyear, globalmonth, globalday);
+                data.get(globalyear, globalmonth, globaldate);
 
                 //日付の表示
-                TextView date = (TextView) calendarUI.this.findViewById(R.id.dayView);
-                txt = globalyear + "年" + globalmonth + "月" + globalday + "日";
-                date.setText(txt);
+                //TextView dateview = (TextView) calendarUI.this.findViewById(R.id.dayView);
+                txt = globalyear + "年" + globalmonth + "月" + globaldate + "日";
+                dateview.setText(txt);
 
                 //学習時間の表示
-                TextView study = (TextView) calendarUI.this.findViewById(R.id.studyTime);
+                //TextView study = (TextView) calendarUI.this.findViewById(R.id.studyTime);
                 int hour = 0, minute = 0;//学習時間(hour時間minute分)
                 hour = data.studyTime / 60;
                 minute = data.studyTime % 60;
@@ -65,7 +122,7 @@ public class calendarUI extends AppCompatActivity {
                 study.setText(txt);
 
                 //todoの表示
-                TextView todo = (TextView) calendarUI.this.findViewById(R.id.todoList);
+                //TextView todo = (TextView) calendarUI.this.findViewById(R.id.todoList);
                 txt = "・todo\n";
                 if (data.task == null) { //タスクが登録されていない場合
                     txt = txt + "タスクはありません。\n";
@@ -87,7 +144,6 @@ public class calendarUI extends AppCompatActivity {
                     }
                 }
                 event.setText(txt);
-                Log.d("calendar","get data");
             }
         });
     }
@@ -98,24 +154,40 @@ public class calendarUI extends AppCompatActivity {
         editText.setHint("イベント名");
         AlertDialog.Builder alertadd = new AlertDialog.Builder(this); //アラートダイアログ呼び出し
         alertadd.setTitle("イベントの追加");
-        alertadd.setMessage(globalyear+"-"+globalmonth+"-"+globalday);
+        alertadd.setMessage(globalyear+"-"+globalmonth+"-"+globaldate);
         alertadd.setView(editText);
         //完了ボタンクリック時の操作
         alertadd.setPositiveButton("完了",new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialog, int which){
-                calendarMain cal = new calendarMain();
-                boolean check = cal.add(globalyear,globalmonth,globalday,editText.getText().toString());
-                cal.get(globalyear,globalmonth,globalday);
-                String txt = "";
-                for (int i = 0; i < cal.event.size(); i++) {
-                    txt = txt + cal.event.get(i) + "\n";
+                if(editText.getText().toString().length() > 20){ //文字数が20文字より多い場合
+                    Toast toast = Toast.makeText(calendarUI.this,"イベント名を20文字以下にしてください",Toast.LENGTH_LONG);
+                    toast.show();
+                }else if(editText.getText().toString().contains("\n")) {//改行文字が含まれている場合
+                    Toast toast = Toast.makeText(calendarUI.this, "改行文字を含めないでください", Toast.LENGTH_LONG);
+                    toast.show();
+                }else if(editText.getText().toString().contains(" ")) {
+                    Toast toast = Toast.makeText(calendarUI.this, "スペースを含めないでください", Toast.LENGTH_LONG);
+                    toast.show();
+                }else if(editText.getText().toString().contains(",")) {
+                    Toast toast = Toast.makeText(calendarUI.this, "「,」を含めないでください", Toast.LENGTH_LONG);
+                    toast.show();
+                }else if(globalyear >= 2100 || globalyear < 2020) {
+                    Toast toast = Toast.makeText(calendarUI.this, "範囲外の日付です", Toast.LENGTH_LONG);
+                    toast.show();
+                } else{//正常に入力を受け付けた場合
+                    calendarMain cal = new calendarMain();
+                    boolean check = cal.add(globalyear, globalmonth, globaldate, editText.getText().toString());
+                    cal.get(globalyear, globalmonth, globaldate);
+                    String txt = "";
+                    for (int i = 0; i < cal.event.size(); i++) {
+                        txt = txt + cal.event.get(i) + "\n";
+                    }
+                    if (!check) {
+                        txt = "書き込み失敗";
+                    }
+                    event.setText(txt);
                 }
-                if(!check){
-                    txt = "書き込み失敗";
-                }
-                event.setText(txt);
-                Log.d("calendar","add data");
             }
         });
         alertadd.setNegativeButton("キャンセル", null);
@@ -124,48 +196,54 @@ public class calendarUI extends AppCompatActivity {
 
     //イベント情報の削除
     public void deleteOnClick(View view) {
+        //イベント情報の取得
         calendarMain cal = new calendarMain();
-        cal.get(globalyear,globalmonth,globalday);
-        boolean[] flug = new boolean[cal.event.size()];
-        String[] eventname = new String[cal.event.size()];
+        cal.get(globalyear,globalmonth,globaldate);
+
+        //リストの生成
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        final CheckBox[] checkbox;
+        checkbox = new CheckBox[cal.event.size()];
         for(int i = 0; i<cal.event.size(); i++){
-            flug[i] = false;
-            eventname[i] = cal.event.get(i);
+            checkbox[i] = new CheckBox(this);
+            checkbox[i].setText(cal.event.get(i));
+            layout.addView(checkbox[i]);
         }
+
+        //アラートダイアログの設定
         AlertDialog.Builder alertdelete = new AlertDialog.Builder(this);
         alertdelete.setTitle("イベントの削除");
-        alertdelete.setMessage(globalyear+"-"+globalmonth+"-"+globalday);
-        alertdelete.setMultiChoiceItems((CharSequence[])eventname, flug,
-                new DialogInterface.OnMultiChoiceClickListener() {
-                    public void onClick(DialogInterface dialog, int which,
-                                        boolean isChecked) {
-                        flug[which] = isChecked;
-                    }
-                });
-        alertdelete.setPositiveButton("完了",new DialogInterface.OnClickListener(){
-            public void onClick(DialogInterface dialog, int which){
-                TextView event = (TextView) calendarUI.this.findViewById(R.id.eventView);
-                for (int i = 0; i < cal.event.size(); i++) {
-                    if(!flug[i]){
-                        cal.delete(globalyear,globalmonth,globalday,eventname[i]);
-                    }
+        alertdelete.setMessage(globalyear+"-"+globalmonth+"-"+globaldate);
+        alertdelete.setView(layout);
+        alertdelete.setPositiveButton("完了", (dialog, which) -> {
+            for(int i = 0; i < cal.event.size(); i++){
+                //削除処理（チェックがつけられている場合）
+                if(checkbox[i].isChecked() == true) {
+                    cal.delete(globalyear,globalmonth,globaldate,cal.event.get(i));
                 }
-                cal.get(globalyear,globalmonth,globalday);
-                String txt = "";
-                for (int i = 0; i<cal.event.size(); i++){
-                    txt = txt + cal.event.get(i) + "\n";
-                }
-                if(txt == ""){
-                    txt = "イベントはありません";
-                }
-                event.setText(txt);
             }
+            //削除実行後のデータを画面に反映する
+            cal.get(globalyear,globalmonth,globaldate);
+            String txt = "";
+            for (int i = 0; i < cal.event.size(); i++) {
+                txt = txt + cal.event.get(i) + "\n";
+            }
+            TextView event = (TextView) calendarUI.this.findViewById(R.id.eventView); //イベント情報を出力するテキストボックス
+            event.setText(txt);
         });
-        alertdelete.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
+        alertdelete.setNegativeButton("キャンセル", (dialog, which) -> {
         });
         alertdelete.show();
+    }
+
+    public void onClickHint(View view){
+        final TextView textview = new TextView(this);
+        textview.setText("カレンダーで予定を確認したい日付をクリックすると、その日のイベントおよび学習時間、その日が締め切りのTodoが表示されます");
+        AlertDialog.Builder alerthint = new AlertDialog.Builder(this);
+        alerthint.setTitle("ヒント");
+        alerthint.setView(textview);
+        alerthint.setNegativeButton("閉じる",null);
+        alerthint.show();
     }
 }

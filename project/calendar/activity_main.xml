@@ -19,6 +19,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="5dp"
             android:background="@drawable/circle_button"
+            android:onClick="onClickHint"
             android:text="@string/button_hat"
             android:textSize="13sp"
             app:backgroundTint="#FFC107" />
@@ -26,7 +27,7 @@
         <CalendarView
             android:id="@+id/Calendar"
             android:layout_width="match_parent"
-            android:layout_height="267dp"
+            android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:visibility="visible" />
 
@@ -73,6 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:onClick="deleteOnClick"
                 android:text="削除" />
         </LinearLayout>
 
