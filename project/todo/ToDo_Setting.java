@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -44,6 +45,7 @@ public class ToDo_Setting extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_content);
+        inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);//画面背景
         mainLayout = (LinearLayout) findViewById(R.id.content_layout);
 
 
@@ -190,7 +192,7 @@ public class ToDo_Setting extends AppCompatActivity {
         inputMethodManager.hideSoftInputFromWindow(mainLayout.getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);
 // 背景にフォーカスを移す
-        //mainLayout.requestFocus();
+        mainLayout.requestFocus();
 
         return true;
     }

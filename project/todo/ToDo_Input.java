@@ -20,15 +20,19 @@ import androidx.fragment.app.DialogFragment;
 import android.app.DatePickerDialog;
 import android.content.ContentProviderClient;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.studdysupport.helper.ToDoOpenHelper;
@@ -37,11 +41,14 @@ public class ToDo_Input extends AppCompatActivity {
 
     private View view;
     EditText simekiri; //日付ダイアログのEditText
-
+    InputMethodManager inputMethodManager; // キーボートの有無や背景タッチを可能にするため
+    private LinearLayout mainLayout;       //のもの
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input);
+        inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        mainLayout = (LinearLayout) findViewById(R.id.setting_layout);
         simekiri = (EditText) findViewById(R.id.edit_text2);//日付ダイアログのEditText
     }
 
@@ -112,6 +119,19 @@ public class ToDo_Input extends AppCompatActivity {
         datePickerDialog.show();
 
     }
+
+
+    public boolean onTouchEvent(MotionEvent event) {
+
+// キーボードを隠す
+        inputMethodManager.hideSoftInputFromWindow(mainLayout.getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
+// 背景にフォーカスを移す
+        mainLayout.requestFocus();
+
+        return true;
+    }
+}
 /*
     public void onTapEvent(View view) { //(View)ビュー
 
@@ -120,4 +140,3 @@ public class ToDo_Input extends AppCompatActivity {
         dialogFragment.show(getSupportFragmentManager(), "popup");
     }
 }*/
-}
