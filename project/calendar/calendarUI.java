@@ -7,14 +7,18 @@
  ********************************************/
 package com.example.studysupport;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
@@ -26,7 +30,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.studysupport.databinding.ActivityMainBinding;
+//import com.example.studysupport.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,11 +57,10 @@ public class calendarUI extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_calendar);
         CalendarView cal = findViewById(R.id.Calendar);
-        long a = cal.getDate();
-        Log.d("calendar", String.valueOf(a));
-        cal.setMaxDate(a);
+        BottomNavigationView menu = findViewById(R.id.bnv);
+        menu.getMenu().findItem(R.id.Calendar).setChecked(true);
 
         //今日のデータの表示
         String txt; //出力内容
@@ -72,9 +75,10 @@ public class calendarUI extends AppCompatActivity {
         int hour = 0, minute = 0;//学習時間(hour時間minute分)
         hour = data.studyTime / 60;
         minute = data.studyTime % 60;
-        txt = "・学習時間\n" + hour + "時間" + minute + "分\n";
+        txt = hour + "時間" + minute + "分\n";
         study.setText(txt);
         //todoの表示
+        /*
         TextView todo = (TextView) calendarUI.this.findViewById(R.id.todoList);
         txt = "・todo\n";
         if (data.task == null) { //タスクが登録されていない場合
@@ -85,6 +89,7 @@ public class calendarUI extends AppCompatActivity {
             }
         }
         todo.setText(txt);
+         */
         //イベント情報の表示
         TextView event = (TextView) calendarUI.this.findViewById(R.id.eventView);
         txt = "";
@@ -118,11 +123,12 @@ public class calendarUI extends AppCompatActivity {
                 int hour = 0, minute = 0;//学習時間(hour時間minute分)
                 hour = data.studyTime / 60;
                 minute = data.studyTime % 60;
-                txt = "・学習時間\n" + hour + "時間" + minute + "分\n";
+                txt = hour + "時間" + minute + "分\n";
                 study.setText(txt);
 
                 //todoの表示
                 //TextView todo = (TextView) calendarUI.this.findViewById(R.id.todoList);
+                /*
                 txt = "・todo\n";
                 if (data.task == null) { //タスクが登録されていない場合
                     txt = txt + "タスクはありません。\n";
@@ -132,6 +138,7 @@ public class calendarUI extends AppCompatActivity {
                     }
                 }
                 todo.setText(txt);
+                 */
 
                 //イベントの表示
                 TextView event = (TextView) calendarUI.this.findViewById(R.id.eventView);
@@ -146,9 +153,44 @@ public class calendarUI extends AppCompatActivity {
                 event.setText(txt);
             }
         });
+
+        menu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @SuppressLint("NonConstantResourceId")
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Intent intent;
+                switch (item.getItemId()) {
+                    case R.id.Main:
+                        intent = new Intent(calendarUI.this, MainActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        return true;
+                    case R.id.Timer:
+                        intent = new Intent(calendarUI.this, MainTimerFrame.class);
+                        startActivity(intent);
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        return true;
+                    case R.id.Study:
+                        intent = new Intent(calendarUI.this, StudyRecord_UI.class);
+                        startActivity(intent);
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        return true;
+                    case R.id.Calendar:
+                        return true;
+                    case R.id.ToDo:
+                        intent = new Intent(calendarUI.this, Todo_UI.class);
+                        startActivity(intent);
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        return true;
+                }
+                return false;
+            }
+        });
     }
     //イベント情報の追加(addButtonクリック時の動作)
     public void addOnClick(View view) {
+        calendarMain cal = new calendarMain();
+        cal.get(globalyear,globalmonth,globaldate);
         final EditText editText = new EditText(this); //入力受付用テキストボックス
         TextView event = (TextView) calendarUI.this.findViewById(R.id.eventView); //イベント情報を出力するテキストボックス
         editText.setHint("イベント名");
@@ -175,8 +217,11 @@ public class calendarUI extends AppCompatActivity {
                 }else if(globalyear >= 2100 || globalyear < 2020) {
                     Toast toast = Toast.makeText(calendarUI.this, "範囲外の日付です", Toast.LENGTH_LONG);
                     toast.show();
-                } else{//正常に入力を受け付けた場合
-                    calendarMain cal = new calendarMain();
+                } else if(cal.event.size() >= 10) {//登録されているイベントが10個以上の場合
+                    Toast toast = Toast.makeText(calendarUI.this, "登録できるイベントは10個までです", Toast.LENGTH_LONG);
+                    toast.show();
+                }
+                else{//正常に入力を受け付けた場合
                     boolean check = cal.add(globalyear, globalmonth, globaldate, editText.getText().toString());
                     cal.get(globalyear, globalmonth, globaldate);
                     String txt = "";
