@@ -11,7 +11,7 @@
  *** V1.0        :   馬場　章　2021.07.3
  */
 
-package com.example.studdysupport;
+package com.example.studysupport;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -32,7 +32,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.example.studdysupport.helper.ToDoOpenHelper;
+import com.example.studysupport.helper.ToDoOpenHelper;
 
 
 
@@ -119,7 +119,7 @@ public class ToDo_Setting extends AppCompatActivity {
         }
     }
 
-//更新ボタンが押されたとき入力された情報をデータベースに更新する
+    //更新ボタンが押されたとき入力された情報をデータベースに更新する
     public void update(View view) {
 
         SQLiteOpenHelper helperUpdate = null;
@@ -133,33 +133,33 @@ public class ToDo_Setting extends AppCompatActivity {
 
             Toast.makeText(ToDo_Setting.this, R.string.toast_failed1, Toast.LENGTH_LONG).show();
         }else{
-        try {
-          //データベースの更新
-            helperUpdate = new ToDoOpenHelper(ToDo_Setting.this);
-            databaseUpdate = helperUpdate.getWritableDatabase();
+            try {
+                //データベースの更新
+                helperUpdate = new ToDoOpenHelper(ToDo_Setting.this);
+                databaseUpdate = helperUpdate.getWritableDatabase();
 
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("title", task);
-            contentValues.put("content", simekiri);
+                ContentValues contentValues = new ContentValues();
+                contentValues.put("title", task);
+                contentValues.put("content", simekiri);
 
-            int updateCount = databaseUpdate.update("ToDoList", contentValues, "_id=?", new String[]{String.valueOf(getIntent().getLongExtra("id", 0L))});
-            //更新に成功したら「更新しました」，失敗したら「登録できませんでした」
-            if (updateCount == 1) {
-                Toast.makeText(ToDo_Setting.this, R.string.toast_update, Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(ToDo_Setting.this, R.string.toast_failed, Toast.LENGTH_LONG).show();
+                int updateCount = databaseUpdate.update("ToDoList", contentValues, "_id=?", new String[]{String.valueOf(getIntent().getLongExtra("id", 0L))});
+                //更新に成功したら「更新しました」，失敗したら「登録できませんでした」
+                if (updateCount == 1) {
+                    Toast.makeText(ToDo_Setting.this, R.string.toast_update, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(ToDo_Setting.this, R.string.toast_failed, Toast.LENGTH_LONG).show();
+                }
+                finish(); //リスト表示画面にもどる
+                //データベースのエラー処理，切断
+            } catch (Exception e) {
+                Log.e("エラー", e.getMessage(), e);
+            } finally {
+                databaseUpdate.close();
             }
-            finish(); //リスト表示画面にもどる
-            //データベースのエラー処理，切断
-        } catch (Exception e) {
-            Log.e("エラー", e.getMessage(), e);
-        } finally {
-            databaseUpdate.close();
         }
-    }
 
-}
-//タスクの削除
+    }
+    //タスクの削除
     public void delete(View view) {
 
         SQLiteOpenHelper helperDelete = null;
@@ -170,7 +170,7 @@ public class ToDo_Setting extends AppCompatActivity {
             databaseDelete = helperDelete.getWritableDatabase();
 
             int deleteCount = databaseDelete.delete("ToDoList", "_id=?", new String[]{String.valueOf(getIntent().getLongExtra("id", 0L))});
-          //消去に成功したら「削除しました」失敗したら「登録できませんでした」
+            //消去に成功したら「削除しました」失敗したら「登録できませんでした」
             if (deleteCount == 1) {
                 Toast.makeText(ToDo_Setting.this, R.string.toast_delete, Toast.LENGTH_LONG).show();
             } else {
@@ -185,7 +185,7 @@ public class ToDo_Setting extends AppCompatActivity {
         }
 
     }
-//ダイアログ入力字のエラー対応
+    //ダイアログ入力字のエラー対応
     public boolean onTouchEvent(MotionEvent event) {
 
 // キーボードを隠す
