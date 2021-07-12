@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.studdysupport">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.studysupport">
 
     <application
         android:name=".AppContext"
@@ -9,18 +10,25 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
-        <activity android:name=".ToDo_UI">
-
+        android:theme="@style/Theme.StudySupport">
+        <activity android:name=".PopUpWindow"
+            android:theme="@style/Theme.StudySupport.popMe">
+        </activity>
+        <activity android:name=".StudyRecord_UI" />
+        <activity android:name=".GoalSet" />
+        <activity android:name=".ToDo_UI" />
+        <activity android:name=".ToDo_Input" />
+        <activity android:name=".ToDo_Setting" />
+        <activity android:name=".MainMeasurementFrame" />
+        <activity android:name=".calendarUI" />
+        <activity android:name=".MainTimerFrame" />
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ToDo_Input"/>
-        <activity android:name=".ToDo_Setting"/>
-
     </application>
 
 </manifest>

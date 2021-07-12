@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_vertical"
-    android:descendantFocusability="blocksDescendants"
-    >
+    android:descendantFocusability="blocksDescendants">
+
 
     <TextView
         android:id="@+id/list_row1"
@@ -15,8 +15,19 @@
         android:text="@string/hello"
         android:textSize="20sp" />
 
+    <!--<TextView
+        android:id="@+id/delete_textview"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="5dp"
+
+        android:text="完了" />
+-->
     <Button
-        android:id="@+id/task_delete"
+        android:id="@+id/delete_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -24,7 +35,6 @@
 
         android:descendantFocusability="blocksDescendants"
 
-        android:onClick="deleteTask"
         android:text="@string/done" />
 
 </RelativeLayout>
